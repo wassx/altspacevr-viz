@@ -1,0 +1,1 @@
+{"version":3,"file":"earth.d.ts","sourceRoot":"","sources":["../src/earth.ts"],"names":[],"mappings":"AAAA,OAAO,EAEH,cAAc,EACd,OAAO,EAGV,MAAM,wCAAwC,CAAC;AAEhD,qBAAa,KAAK;IACF,OAAO,CAAC,QAAQ,CAAC,OAAO;IAAkB,OAAO,CAAC,QAAQ,CAAC,QAAQ;gBAAlD,OAAO,EAAE,cAAc,EAAmB,QAAQ,EAAE,OAAO;IAIjF,IAAI,CAAC,OAAO,EAAE,MAAM,GAAG,IAAI;CAkErC"}
