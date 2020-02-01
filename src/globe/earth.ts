@@ -17,11 +17,11 @@ export class Earth {
 
     private readonly _animationName = `earth:axial`;
 
-    constructor(private readonly _assets: AssetContainer, private readonly _context: Context) {
+    constructor(private readonly _assets: AssetContainer, private readonly _context: Context, private readonly _baseUrl: string) {
     }
 
 
-    public init(baseUrl: string): void {
+    public init(): void {
         const bodyName = 'earth';
 
         Actor.Create(this._context, {
@@ -52,7 +52,7 @@ export class Earth {
         });
 
         const earth = Actor.CreateFromGltf(this._assets, {
-            uri: `${baseUrl}/assets/${bodyName}.gltf`,
+            uri: `${this._baseUrl}/assets/${bodyName}.gltf`,
             actor: {
                 name: `${bodyName}-body`,
                 transform: {
@@ -77,7 +77,6 @@ export class Earth {
     private createAxialAnimation(earth: Actor) {
 
         const spin = 1;
-        // days = seconds (not in agreement with orbital animation)
         const axisTimeInSeconds = 30;
         const timeStep = axisTimeInSeconds / this.axialKeyframeCount;
         const keyframes: AnimationKeyframe[] = [];
