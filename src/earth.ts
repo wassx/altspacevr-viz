@@ -1,12 +1,22 @@
 import {
     Actor,
+    ActorLike,
+    AnimationKeyframe,
+    AnimationWrapMode,
     AssetContainer,
     Context,
-    PrimitiveShape,
-    TextAnchorLocation
+    DegreesToRadians,
+    Quaternion, RadiansToDegrees,
+    TextAnchorLocation,
+    Vector3
 } from '@microsoft/mixed-reality-extension-sdk';
 
 export class Earth {
+
+    public readonly axialKeyframeCount = 90;
+
+    private readonly _animationName = `earth:axial`;
+
     constructor(private readonly _assets: AssetContainer, private readonly _context: Context) {
     }
 
@@ -33,31 +43,15 @@ export class Earth {
             actor: {
                 name: `${bodyName}-parent`,
                 transform: {
-                    app: {position: {x: 0, y: 0.5, z: 0}}
+                    app: {
+                        position: {x: 0, y: 0.5, z: 0},
+                        rotation: Quaternion.FromEulerAngles(23.5 * DegreesToRadians, 0, 0)
+                    }
                 }
             }
         });
 
-        console.log(`${baseUrl}/assets/${bodyName}.gltf`);
-
-        Actor.CreatePrimitive(this._assets, {
-            definition: {
-                dimensions: {x: 1, y: 1, z: 1},
-                shape: PrimitiveShape.Sphere,
-                uSegments: 12,
-                vSegments: 12
-            },
-            addCollider: true,
-            actor: {
-                name: 'testobj',
-                transform: {
-                    app: {position: {x: 1, y: 1, z: 1}}
-                }
-            }
-        });
-
-
-        const model = Actor.CreateFromGltf(this._assets, {
+        const earth = Actor.CreateFromGltf(this._assets, {
             uri: `${baseUrl}/assets/${bodyName}.gltf`,
             actor: {
                 name: `${bodyName}-body`,
@@ -68,13 +62,62 @@ export class Earth {
                 collider: {
                     geometry: {
                         shape: 'sphere',
-                        radius: 0.5
+                        radius: 1
                     }
                 }
             }
 
         });
 
+        this.createAxialAnimation(earth);
+
+        earth.resumeAnimation(this._animationName);
+    }
+
+    private createAxialAnimation(earth: Actor) {
+
+        const spin = 1;
+        // days = seconds (not in agreement with orbital animation)
+        const axisTimeInSeconds = 30;
+        const timeStep = axisTimeInSeconds / this.axialKeyframeCount;
+        const keyframes: AnimationKeyframe[] = [];
+        const angleStep = 360 / this.axialKeyframeCount;
+        const initial = earth.transform.local.rotation.clone();
+        let value: Partial<ActorLike>;
+
+        for (let i = 0; i < this.axialKeyframeCount; ++i) {
+            const rotDelta = Quaternion.RotationAxis(
+                Vector3.Up(), (-angleStep * i * spin) * DegreesToRadians);
+            const rotation = initial.multiply(rotDelta);
+            value = {
+                transform: {
+                    local: {rotation}
+                }
+            };
+            keyframes.push({
+                time: timeStep * i,
+                value,
+            });
+        }
+
+        // Final frame
+        value = {
+            transform: {
+                local: {rotation: earth.transform.local.rotation}
+            }
+        };
+        keyframes.push({
+            time: axisTimeInSeconds,
+            value,
+        });
+
+        // Create the animation on the actor
+        earth.createAnimation(
+            this._animationName, {
+                keyframes,
+                events: [],
+                wrapMode: AnimationWrapMode.Loop
+            });
     }
 
 }

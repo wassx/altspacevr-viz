@@ -3,7 +3,7 @@ FROM node:12-alpine
 WORKDIR /opt/app
 
 ENV PORT=80
-ENV BASE_URL=http://vr-dataviz.openode.io
+ENV BASE_URL='http://vr-dataviz.openode.io/'
 
 RUN echo 'set -e' >> /boot.sh
 
