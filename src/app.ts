@@ -7,6 +7,7 @@ export default class Dataviz {
 
     private assets: AssetContainer;
     private readonly _dataService = new DataService();
+    private _scatterCube: ScatterCube;
 
     constructor(private readonly _context: Context, private baseUrl: string) {
         this.assets = new AssetContainer(_context);
@@ -14,6 +15,9 @@ export default class Dataviz {
         this._context.onUserLeft(user => this.userLeft(user));
         this._context.onStarted(() => this.started());
         this._context.onStopped(() => this.stopped());
+
+        this._scatterCube = new ScatterCube(this.assets, this._context, this.baseUrl);
+
     }
 
     userJoined(user: User): void {
@@ -28,9 +32,9 @@ export default class Dataviz {
         const earth = new Earth(this.assets, this._context, this.baseUrl);
         earth.init();
 
-        const scatterCube = new ScatterCube(this.assets, this._context, this.baseUrl);
-        this._dataService.dataUpdate$.subscribe(data => scatterCube.update(data));
         this._dataService.startUpdates();
+
+        this._dataService.dataUpdate$.subscribe(data => this._scatterCube.update(data));
     }
 
     stopped(): void {

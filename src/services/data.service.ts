@@ -10,7 +10,7 @@ export class DataService {
         interval(5000).subscribe(x => {
             const rand = Math.random();
             const result: PointsData[] = []
-            for (let i = 0; i < rand * 100; i++) {
+            for (let i = 0; i < rand * 1000; i++) {
                 result.push({
                     id: `${i}`,
                     name: `${i}-name`,
