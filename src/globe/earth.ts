@@ -1,3 +1,8 @@
+/*!
+ * Copyright (c) Stefan Wasserbauer. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import {
     Actor,
     ActorLike,
@@ -6,7 +11,7 @@ import {
     AssetContainer,
     Context,
     DegreesToRadians,
-    Quaternion, RadiansToDegrees,
+    Quaternion,
     TextAnchorLocation,
     Vector3
 } from '@microsoft/mixed-reality-extension-sdk';
@@ -17,9 +22,10 @@ export class Earth {
 
     private readonly _animationName = `earth:axial`;
 
-    constructor(private readonly _assets: AssetContainer, private readonly _context: Context, private readonly _baseUrl: string) {
+    constructor(private readonly _assets: AssetContainer,
+                private readonly _context: Context,
+                private readonly _baseUrl: string) {
     }
-
 
     public init(): void {
         const bodyName = 'earth';

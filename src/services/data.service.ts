@@ -1,10 +1,15 @@
+/*!
+ * Copyright (c) Stefan Wasserbauer. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+import {Color3, Color4, Vector3} from "@microsoft/mixed-reality-extension-sdk";
 import {interval, Subject} from "rxjs";
 import {PointsData} from "../chart/scatter-cube";
-import {Color3, Color4, Vector3} from "@microsoft/mixed-reality-extension-sdk";
 
 export class DataService {
 
-    dataUpdate$ = new Subject<PointsData[]>();
+    public dataUpdate$ = new Subject<PointsData[]>();
 
     public startUpdates(): void {
         interval(5000).subscribe(x => {
@@ -22,6 +27,5 @@ export class DataService {
             this.dataUpdate$.next(result);
         });
     }
-
 
 }

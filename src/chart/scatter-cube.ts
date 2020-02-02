@@ -1,3 +1,8 @@
+/*!
+ * Copyright (c) Stefan Wasserbauer. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import {
     Actor,
     AssetContainer,

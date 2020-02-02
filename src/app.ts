@@ -1,7 +1,12 @@
-import {Earth} from "./globe/earth";
+/*!
+ * Copyright (c) Stefan Wasserbauer. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import {AssetContainer, Context, User} from "@microsoft/mixed-reality-extension-sdk";
-import {DataService} from "./services/data.service";
 import {ScatterCube} from "./chart/scatter-cube";
+import {Earth} from "./globe/earth";
+import {DataService} from "./services/data.service";
 
 export default class Dataviz {
 
@@ -20,15 +25,15 @@ export default class Dataviz {
 
     }
 
-    userJoined(user: User): void {
+    private userJoined(user: User): void {
         console.log('User joined: ' + user.name);
     }
 
-    userLeft(user: User): void {
+    private userLeft(user: User): void {
         console.log('User left: ' + user.name);
     }
 
-    started(): void {
+    private started(): void {
         const earth = new Earth(this.assets, this._context, this.baseUrl);
         earth.init();
 
@@ -37,7 +42,7 @@ export default class Dataviz {
         this._dataService.dataUpdate$.subscribe(data => this._scatterCube.update(data));
     }
 
-    stopped(): void {
+    private stopped(): void {
 
     }
 }
