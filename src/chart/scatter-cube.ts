@@ -26,16 +26,18 @@ export interface PointsData {
 export class ScatterCube {
     private _container: Actor;
     private _blueMat: Material;
+    private _dataPointsContainer: Actor;
 
-
-    constructor(private readonly _assets: AssetContainer, private readonly _context: Context, private readonly _baseUrl: string) {
+    constructor(private readonly _assets: AssetContainer,
+                private readonly _context: Context,
+                private readonly _baseUrl: string) {
         this.init();
         this._blueMat = this._assets.createMaterial('default', {
             color: Color3.Magenta()
         });
     }
 
-    init(): void {
+    public init(): void {
         this._container = Actor.Create(this._context, {
             actor: {
                 name: `chart-parent`,
@@ -47,16 +49,31 @@ export class ScatterCube {
             }
         });
 
+        this._dataPointsContainer = Actor.Create(this._context, {
+            actor: {
+                name: `data-points-parent`,
+                parentId: this._container.id,
+                // transform: {
+                //     app: {
+                //         position: {x: 1.5, y: 0, z: 0},
+                //     }
+                // }
+            }
+        });
+
         Actor.CreatePrimitive(this._assets, {
             definition: {
                 shape: PrimitiveShape.Plane,
-                uSegments: 10,
-                vSegments: 10,
+                uSegments: 1,
+                vSegments: 1,
                 dimensions: Vector3.One()
             },
             actor: {
                 name: 'x-plane',
                 parentId: this._container.id,
+                transform: {
+                    local: {position: {x: 0.5, y: 0.0, z: 0.5}}
+                }
                 // appearance: {
                 //     materialId: this._blueMat.id
                 // }
@@ -66,8 +83,8 @@ export class ScatterCube {
         Actor.CreatePrimitive(this._assets, {
             definition: {
                 shape: PrimitiveShape.Plane,
-                uSegments: 10,
-                vSegments: 10,
+                uSegments: 1,
+                vSegments: 1,
                 dimensions: Vector3.One()
             },
             actor: {
@@ -76,10 +93,12 @@ export class ScatterCube {
                 transform: {
                     local: {
                         rotation: Quaternion.FromEulerAngles(90 * DegreesToRadians, 0, 0),
+                        position: {x: 0.5, y: 0.5, z: 0.0}
                     }
                 },
                 // appearance: {
-                //     materialId: this._blueMat.id
+                //     materialId: this._blueMat.id,
+                //
                 // }
             }
         });
@@ -87,7 +106,7 @@ export class ScatterCube {
 
     public update(data: PointsData[]): void {
 
-        for (const child of this._container.children) {
+        for (const child of this._dataPointsContainer.children) {
             child.destroy();
         }
 
@@ -102,7 +121,7 @@ export class ScatterCube {
                 },
                 actor: {
                     name: `${dat.name}-test`,
-                    parentId: this._container.id,
+                    parentId: this._dataPointsContainer.id,
                     transform: {
                         local: {
                             position: dat.position,
@@ -114,7 +133,7 @@ export class ScatterCube {
                     }
 
                 }
-            })
+            });
         }
 
     }

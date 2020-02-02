@@ -21,7 +21,7 @@ export class DataService {
                     name: `${i}-name`,
                     position: new Vector3(Math.random(), Math.random(), Math.random()),
                     color: Color4.FromColor3(Color3.Random(), 1)
-                })
+                });
             }
 
             this.dataUpdate$.next(result);
